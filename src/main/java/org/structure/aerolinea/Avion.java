@@ -4,12 +4,14 @@ public class Avion {
 
     private int matricula;
     private TipoVuelo tipoVuelo;
+    private int cantViajes;
     private boolean isDisponible;
 
-    public Avion(int matricula, TipoVuelo tipoVuelo, boolean isDisponible) {
+    public Avion(int matricula, TipoVuelo tipoVuelo) {
         this.matricula = matricula;
         this.tipoVuelo = tipoVuelo;
-        this.isDisponible = isDisponible;
+        this.cantViajes = 0;
+        this.isDisponible = true;
     }
 
     public int getMatricula() {
@@ -34,5 +36,13 @@ public class Avion {
 
     public void setDisponible(boolean disponible) {
         isDisponible = disponible;
+    }
+
+    public int getCantViajes() {
+        return cantViajes;
+    }
+
+    public void setCantViajes(int cantViajes) {
+        this.cantViajes = cantViajes;
     }
 }
