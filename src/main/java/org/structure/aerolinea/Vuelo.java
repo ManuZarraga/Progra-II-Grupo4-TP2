@@ -3,13 +3,17 @@ package main.java.org.structure.aerolinea;
 public class Vuelo {
 
     private String origen;
+    private TipoVuelo tipoVuelo;
     private String destino;
     private String condicion;
+    private Avion avion;
 
-    public Vuelo(String origen, String destino) {
+    public Vuelo(Avion avion,String origen, String destino, TipoVuelo tipoVuelo) {
+        this.tipoVuelo = tipoVuelo;
         this.origen = origen;
         this.destino = destino;
         this.condicion = "En Horario";
+        this.avion = avion;
     }
 
     public int medirUrgencia(String urgencia){

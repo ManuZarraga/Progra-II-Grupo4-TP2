@@ -8,8 +8,8 @@ import main.java.org.structure.exceptions.ColaVaciaException;
 public class ColaVuelos implements PriorityQueueADT {
 
     private int tamanioCola;
-    private static Vuelo[] colaVuelos = new Vuelo[20];
-    private static String[] colaVuelosXPrioridad = new String[20];
+    private static Vuelo[] colaVuelos = new Vuelo[50];
+    private static String[] colaVuelosXPrioridad = new String[50];
     private int contador = 0;
 
     public void mostrarLista(){

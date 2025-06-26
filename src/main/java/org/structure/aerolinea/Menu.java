@@ -25,16 +25,16 @@ public class Menu {
     Aeropuerto aer14 = new Aeropuerto("ICN", "Incheon Intl. (Corea del Sur)");
     Aeropuerto aer15 = new Aeropuerto("MAD", "Adolfo Suárez Madrid–Barajas (España)");
 
-    Avion avion1 = new Avion(111, TipoVuelo.NACIONAL);
-    Avion avion2 = new Avion(222, TipoVuelo.NACIONAL);
-    Avion avion3 = new Avion(333, TipoVuelo.NACIONAL);
-    Avion avion4 = new Avion(444, TipoVuelo.INTERNACIONAL);
-    Avion avion5 = new Avion(555, TipoVuelo.INTERNACIONAL);
-    Avion avion6 = new Avion(666, TipoVuelo.INTERNACIONAL);
-    Avion avion7 = new Avion(777, TipoVuelo.INTERNACIONAL);
-    Avion avion8 = new Avion(888, TipoVuelo.CARGA);
-    Avion avion9 = new Avion(999, TipoVuelo.CARGA);
-    Avion avion10 = new Avion(1000, TipoVuelo.CARGA);
+    Avion avion1 = new Avion(111, "Boeign 737");
+    Avion avion2 = new Avion(222, "Airbus A320");
+    Avion avion3 = new Avion(333, "Boeign 767");
+    Avion avion4 = new Avion(444, "Embraer E190");
+    Avion avion5 = new Avion(555, "Boeing 777");
+    Avion avion6 = new Avion(666, "Airbus A350");
+    Avion avion7 = new Avion(777, "Airbus A330");
+    Avion avion8 = new Avion(888, "Embraer E195");
+    Avion avion9 = new Avion(999, "Bombardier CRJ900");
+    Avion avion10 = new Avion(1000, "Airbus A380");
 
     public Menu() {
     }

@@ -3,13 +3,13 @@ package main.java.org.structure.aerolinea;
 public class Avion {
 
     private int matricula;
-    private TipoVuelo tipoVuelo;
     private int cantViajes;
     private boolean isDisponible;
+    private String tipoAvion;
 
-    public Avion(int matricula, TipoVuelo tipoVuelo) {
+    public Avion(int matricula, String tipoAvion) {
+        this.tipoAvion = tipoAvion;
         this.matricula = matricula;
-        this.tipoVuelo = tipoVuelo;
         this.cantViajes = 0;
         this.isDisponible = true;
     }
@@ -20,14 +20,6 @@ public class Avion {
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
-    }
-
-    public TipoVuelo getTipoVuelo() {
-        return tipoVuelo;
-    }
-
-    public void setTipoVuelo(TipoVuelo tipoVuelo) {
-        this.tipoVuelo = tipoVuelo;
     }
 
     public boolean isDisponible() {
@@ -44,5 +36,13 @@ public class Avion {
 
     public void setCantViajes(int cantViajes) {
         this.cantViajes = cantViajes;
+    }
+
+    public String getTipoAvion() {
+        return tipoAvion;
+    }
+
+    public void setTipoAvion(String tipoAvion) {
+        this.tipoAvion = tipoAvion;
     }
 }
