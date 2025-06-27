@@ -12,7 +12,8 @@ public class ColaVuelos implements PriorityQueueADT {
     private static String[] colaVuelosXPrioridad = new String[50];
     private int contador = 0;
 
-    public void mostrarLista(){
+
+    public void mostrarCola(){
         System.out.println("=== VUELOS PROGRAMADOS ===");
 
         System.out.println("Vuelos pendientes:");
@@ -39,11 +40,11 @@ public class ColaVuelos implements PriorityQueueADT {
 
     @Override
     public void add(Vuelo value, String condicion) {
-        if (contador == 20) {
+        if (contador == 50) {
             throw new ColaCompletaException("La cola de vuelos está completa.");
         }
 
-        value.setCondicion(condicion);
+
 
         if (contador == 0) {
             colaVuelos[0] = value;
@@ -85,5 +86,14 @@ public class ColaVuelos implements PriorityQueueADT {
     @Override
     public boolean isEmpty() {
         return tamanioCola == 0;
+    }
+
+    public String buscarAvionXId(String IdVuelo) {
+        for (int i=0;i<contador;i++){
+            if (colaVuelos[i].getIDVuelo()==IdVuelo){
+                return colaVuelos[i].getAvion().getTipoAvion();
+            }
+        }
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package main.java.org.structure.implementation;
 import main.java.org.structure.aerolinea.Aeropuerto;
 import main.java.org.structure.definition.GraphADT;
 import main.java.org.structure.definition.SetADT;
+import main.java.org.structure.fixed.StaticSetADT;
 
 public class GrafoAeropuertos implements GraphADT {
 
@@ -10,6 +11,13 @@ public class GrafoAeropuertos implements GraphADT {
     private SetADT vertices;
     private Aeropuerto[] aeropuertos;
     private int cantidad;
+
+    public GrafoAeropuertos() {
+        this.vertices = new StaticSetADT();
+        this.cantidad = cantidad;
+        aeropuertos = new Aeropuerto[20];
+        matrizAdyacencia = new int[15][15];
+    }
 
     @Override
     public SetADT getVertxs() {

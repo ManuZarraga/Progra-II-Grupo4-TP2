@@ -8,7 +8,7 @@ import main.java.org.structure.exceptions.ListaVaciaException;
 
 public class ListaAviones implements AvionADT {
 
-    private static Avion[] listaAviones = new Avion[30];
+    private static Avion[] listaAviones = new Avion[10];
     private int contador = 0;
 
     public void  mostrarLista(){

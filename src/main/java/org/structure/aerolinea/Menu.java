@@ -11,6 +11,8 @@ public class Menu {
     private int id;
     Scanner myObj = new Scanner(System.in);
     GrafoAeropuertos grafoAeropuertos = new GrafoAeropuertos();
+    grafoAeropuertos.addVertx(1);
+
 
     Aeropuerto aer1 = new Aeropuerto("ATL", "Hartsfield-Jackson Atlanta Intl. (EE. UU.)");
     Aeropuerto aer2 = new Aeropuerto("PEK", "Beijing Capital Intl. (China)");
@@ -81,6 +83,9 @@ public class Menu {
                 System.out.println("Opción incorrecta.");
                 iniciar();
         }
+    }
+    public void terminarVuelo(){
+
     }
 
 }
