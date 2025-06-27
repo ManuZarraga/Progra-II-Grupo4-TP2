@@ -1,5 +1,7 @@
 package main.java.org.structure.aerolinea;
 
+import main.java.org.structure.implementation.GrafoAeropuertos;
+
 import java.util.Scanner;
 
 public class Menu {
@@ -8,6 +10,7 @@ public class Menu {
     private String consulta;
     private int id;
     Scanner myObj = new Scanner(System.in);
+    GrafoAeropuertos grafoAeropuertos = new GrafoAeropuertos();
 
     Aeropuerto aer1 = new Aeropuerto("ATL", "Hartsfield-Jackson Atlanta Intl. (EE. UU.)");
     Aeropuerto aer2 = new Aeropuerto("PEK", "Beijing Capital Intl. (China)");
@@ -46,7 +49,7 @@ public class Menu {
                   SISTEMA DE GESTIÓN DE VUELOS       
         ==============================================
         Opciones disponibles:
-        1. 
+        1.
         2. 
         3. 
         4. 
