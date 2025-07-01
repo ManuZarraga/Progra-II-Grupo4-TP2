@@ -4,12 +4,13 @@ import main.java.org.structure.aerolinea.Vuelo;
 import main.java.org.structure.definition.PriorityQueueADT;
 import main.java.org.structure.exceptions.ColaCompletaException;
 import main.java.org.structure.exceptions.ColaVaciaException;
+import main.java.org.structure.exceptions.VueloInexistenteException;
 
 public class ColaVuelos implements PriorityQueueADT {
 
     private int tamanioCola;
     private static Vuelo[] colaVuelos = new Vuelo[50];
-    private static String[] colaVuelosXPrioridad = new String[50];
+    private static int[] colaVuelosXPrioridad = new int[50];
     private int contador = 0;
 
 
@@ -31,7 +32,7 @@ public class ColaVuelos implements PriorityQueueADT {
     }
 
     @Override
-    public String getPriority() {
+    public int getPriority() {
         if(isEmpty()){
             throw new ColaVaciaException("La cola está vacia, no existen prioridades.");
         }
@@ -39,12 +40,10 @@ public class ColaVuelos implements PriorityQueueADT {
     }
 
     @Override
-    public void add(Vuelo value, String condicion) {
+    public void add(Vuelo value, int condicion) {
         if (contador == 50) {
             throw new ColaCompletaException("La cola de vuelos está completa.");
         }
-
-
 
         if (contador == 0) {
             colaVuelos[0] = value;
@@ -52,8 +51,8 @@ public class ColaVuelos implements PriorityQueueADT {
         } else {
             int i;
             for (i = contador -1; i >= 0; i--) {
-                int urgenciaActual = value.medirUrgencia(condicion);
-                int urgenciaEnCola = colaVuelos[i].medirUrgencia(colaVuelosXPrioridad[i]);
+                int urgenciaActual = condicion;
+                int urgenciaEnCola = colaVuelosXPrioridad[i];
 
                 if (urgenciaActual >= urgenciaEnCola) {
                     break;
@@ -78,22 +77,37 @@ public class ColaVuelos implements PriorityQueueADT {
             colaVuelosXPrioridad[i] = colaVuelosXPrioridad[i+1];
         }
         colaVuelos[contador-1] = null;
-        colaVuelosXPrioridad[contador-1] = null;
+        colaVuelosXPrioridad[contador-1] = 0;
         contador--;
         tamanioCola--;
+    }
+
+    public Vuelo buscarPorId(int id){
+        for (int i = 0; i < contador - 1; i++){
+            if (colaVuelos[i].getIDVuelo() == id){
+                return colaVuelos[i];
+            }
+        }
+        throw new VueloInexistenteException("El Vuelo no existe");
+    }
+
+    public void quitarPorId(Vuelo vuelo, int condicion){
+        for(int j = 0; j < contador; j++){
+            if(vuelo.getIDVuelo() == colaVuelos[j].getIDVuelo()){
+                for (int i = j; i < contador - 1; i++){
+                    colaVuelos[i] = colaVuelos[i+1];
+                    colaVuelosXPrioridad[i] = colaVuelosXPrioridad[i+1];
+                }
+                colaVuelos[contador-1] = null;
+                colaVuelosXPrioridad[contador-1] = 0;
+                contador--;
+                tamanioCola--;
+            }
+        }
     }
 
     @Override
     public boolean isEmpty() {
         return tamanioCola == 0;
-    }
-
-    public String buscarAvionXId(String IdVuelo) {
-        for (int i=0;i<contador;i++){
-            if (colaVuelos[i].getIDVuelo()==IdVuelo){
-                return colaVuelos[i].getAvion().getTipoAvion();
-            }
-        }
-        return null;
     }
 }

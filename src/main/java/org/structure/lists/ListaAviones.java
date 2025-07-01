@@ -8,10 +8,10 @@ import main.java.org.structure.exceptions.ListaVaciaException;
 
 public class ListaAviones implements AvionADT {
 
-    private static Avion[] listaAviones = new Avion[10];
+    private static Avion[] listaAviones = new Avion[20];
     private int contador = 0;
 
-    public void  mostrarLista(){
+    public void mostrarLista(){
         for(int i = 0; i < contador; i++){
             System.out.println(listaAviones[i]);
         }
@@ -65,5 +65,18 @@ public class ListaAviones implements AvionADT {
     @Override
     public boolean isEmpty() {
         return contador == 0;
+    }
+
+    public int getContador() {
+        return contador;
+    }
+
+    public String buscarAvionXId(int matricula) {
+        for (int i=0;i<contador;i++){
+            if (listaAviones[i].getMatricula() == matricula){
+                return listaAviones[i].getTipoAvion();
+            }
+        }
+        return null;
     }
 }

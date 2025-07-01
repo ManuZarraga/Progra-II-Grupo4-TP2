@@ -13,13 +13,13 @@ public interface PriorityQueueADT {
      * Descripcion: Devuelve la prioridad del primer elemento de la estructura. Precondición: La estructura debe tener
      * elementos.
      */
-    String getPriority();
+    int getPriority();
 
     /**
      * Descripcion: Agrega un elemento al final de la estructura. Precondición: La estructura no debe sobrepasar la
      * capacidad.
      */
-    void add(Vuelo value, String priority);
+    void add(Vuelo value, int priority);
 
     /**
      * Descripcion: Elimina el primer elemento que existe. Precondición: La estructura debe tener elementos.

@@ -3,32 +3,17 @@ package main.java.org.structure.aerolinea;
 public class Vuelo {
 
     private String origen;
-    private String IDVuelo; //  Identificador para saber que avion esta asignado al vuelo
-    private TipoVuelo tipoVuelo;
+    private int IDVuelo;
+    private int tipoVuelo;
     private String destino;
-    private String condicion;
     private Avion avion;
 
-    public Vuelo(Avion avion,String origen, String destino, TipoVuelo tipoVuelo,String IDVuelo) {
+    public Vuelo(Avion avion,String origen, String destino, int tipoVuelo, int IDVuelo) {
         this.tipoVuelo = tipoVuelo;
         this.origen = origen;
         this.destino = destino;
-        this.condicion = "En Horario";
         this.avion = avion;
-        this.IDVuelo =IDVuelo;
-    }
-
-    public int medirUrgencia(String urgencia){
-        switch (urgencia.toUpperCase()){
-            case "INTERNACIONALES":
-                return 1;
-            case "CARGA":
-                return 2;
-            case "NACIONALES":
-                return 3;
-            default:
-                return 3;
-        }
+        this.IDVuelo = IDVuelo;
     }
 
     public String getOrigen() {
@@ -47,7 +32,7 @@ public class Vuelo {
         return avion;
     }
 
-    public String getIDVuelo() {
+    public int getIDVuelo() {
         return IDVuelo;
     }
 
@@ -55,11 +40,11 @@ public class Vuelo {
         this.destino = destino;
     }
 
-    public String getCondicion() {
-        return condicion;
+    public int getTipoVuelo() {
+        return tipoVuelo;
     }
 
-    public void setCondicion(String condicion) {
-        this.condicion = condicion;
+    public void setTipoVuelo(int tipoVuelo) {
+        this.tipoVuelo = tipoVuelo;
     }
 }

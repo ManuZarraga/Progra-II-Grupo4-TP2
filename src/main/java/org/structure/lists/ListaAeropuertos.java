@@ -66,4 +66,13 @@ public class ListaAeropuertos implements AeropuertoADT {
     public boolean isEmpty() {
         return contador == 0;
     }
+
+    public boolean existeAeropuerto(String codigo){
+        for(int i = 0; i < contador; i++){
+            if(listaAeropuertos[i].getCodigo().equals(codigo)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
