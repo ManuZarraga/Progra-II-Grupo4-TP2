@@ -1,76 +1,109 @@
 package main.java.org.structure.implementation;
 
 import main.java.org.structure.definition.GraphADT;
+import main.java.org.structure.definition.Set2ADT;
+import main.java.org.structure.exceptions.AristaYaCreada;
 import main.java.org.structure.fixed.StaticSetADT;
 
+
 public class Grafo implements GraphADT {
-    private StaticSetADT vertices; // Conjunto de vértices (aeropuertos)
-    private StaticSetADT[] edges;  // Aristas (conexiones entre aeropuertos)
+    private String[] vertices;
+    private String[][] edges;
+    private int cantVert=0;
 
     public Grafo(int numberOfVertices) {
-        vertices = new StaticSetADT();
-        edges = new StaticSetADT[numberOfVertices];
+        vertices = new String[50];
+        edges = new String[50][50];
 
-        // Inicializamos los conjuntos de aristas
-        for (int i = 0; i < numberOfVertices; i++) {
-            edges[i] = new StaticSetADT();
+    }
+
+    @Override
+    public Set2ADT getVertxs() {
+        Set2ADT aux = new StaticSetADT();
+        for (String elemento:vertices)
+            aux.add(elemento);
+        return aux;
+    }
+
+    @Override
+    public void addVertx(String vertex) {
+        Set2ADT aux = getVertxs();
+        if (!aux.exist(vertex)) {
+            vertices[cantVert]=vertex;
+            cantVert++;
         }
     }
 
     @Override
-    public StaticSetADT getVertxs() {
-        return vertices;
-    }
-
-    @Override
-    public void addVertx(int vertex) {
-        if (!vertices.exist(vertex)) {
-            vertices.add(vertex);
-        }
-    }
-
-    @Override
-    public void removeVertx(int vertex) {
-        if (vertices.exist(vertex)) {
-            vertices.remove(vertex);
-            // Eliminar también las rutas asociadas al vértice
-            for (StaticSetADT edge : edges) {
-                edge.remove(vertex);
+    public void removeVertx(String vertex) {
+        int aux1=0;
+        Set2ADT aux = getVertxs();
+        if (aux.exist(vertex)) {
+            for (int i=0;i<cantVert;i++){
+                if (vertices[i]==vertex){
+                    aux1=i;
+                }
             }
-            edges[vertex] = null;
+            vertices[aux1]= null;
+            for (int i=0;i<cantVert;i++){
+                if (edges[i].equals(vertex)){
+                    aux1=i;
+                }
+            }
+            edges[aux1]= null;
         }
     }
 
     @Override
-    public void addEdge(int vertxOne, int vertxTwo, int weight) {
-        if (vertices.exist(vertxOne) && vertices.exist(vertxTwo)) {
-            edges[vertxOne].add(vertxTwo);
-            edges[vertxTwo].add(vertxOne); // Grafo no dirigido
+    public void addEdge(String vertxOne, String vertxTwo, int weight) {
+            if (exist(vertices,vertxOne) && exist(vertices,vertxTwo)) {
+                int aux=pos(vertices,vertxOne);
+                int aux1=pos(vertices,vertxTwo);
+                if (edges[aux1][aux]==null){
+                    edges[aux][aux1] = vertxOne;
+                }
+                else {throw new AristaYaCreada("La arista ya fue creada")}
+            }
+    }
+
+    @Override
+    public void removeEdge(String  vertxOne, String vertxTwo) {
+        if (exist(vertices,vertxOne) && exist(vertices,vertxTwo)) {
+            int aux=pos(vertices,vertxOne);
+            int aux1=pos(vertices,vertxTwo);
+            edges[aux][aux1] = null;
         }
     }
 
     @Override
-    public void removeEdge(int vertxOne, int vertxTwo) {
-        if (vertices.exist(vertxOne) && vertices.exist(vertxTwo)) {
-            edges[vertxOne].remove(vertxTwo);
-            edges[vertxTwo].remove(vertxOne); // Grafo no dirigido
-        }
+    public boolean existsEdge(String vertxOne, String vertxTwo) {
+        int aux=pos(vertices,vertxOne);
+        int aux1=pos(vertices,vertxTwo);
+        return edges[aux][aux1] != null;
     }
 
     @Override
-    public boolean existsEdge(int vertxOne, int vertxTwo) {
-        return vertices.exist(vertxOne) && vertices.exist(vertxTwo) &&
-                edges[vertxOne].exist(vertxTwo);
-    }
-
-    @Override
-    public int edgeWeight(int vertxOne, int vertxTwo) {
-        // Este ejemplo no usa pesos concretos para las aristas
-        return 1; // Simplemente asignamos un peso fijo para ilustrar el funcionamiento
+    public int edgeWeight(String vertxOne, String vertxTwo) {
+        return 1;
     }
 
     @Override
     public boolean isEmpty() {
-        return vertices.isEmpty();
+        return getVertxs().isEmpty();
+    }
+    private boolean exist(String[] array,String value){
+        for (String elemento:array){
+            if (elemento==value){
+                return true;}
+        }
+        return false;
+    }
+    private int pos(String[] array,String value){
+        for (int i=0;i<cantVert;i++){
+            if (array[i].equals(value)){
+                return i;
+            }
+        }
+        return -1;
     }
 }

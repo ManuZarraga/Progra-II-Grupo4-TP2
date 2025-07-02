@@ -1,24 +1,24 @@
 package main.java.org.structure.fixed;
 
-import main.java.org.structure.definition.SetADT;
+import main.java.org.structure.definition.Set2ADT;
 
 import java.util.Random;
 
-public class StaticSetADT implements SetADT {
+public class StaticSetADT implements Set2ADT {
 
     private final int MAX = 100; // Capacidad máxima del conjunto
-    private int[] elements;
+    private String[] elements;
     private int size;
     private Random rand;
 
     public StaticSetADT() {
-        elements = new int[MAX];
+        elements = new String[MAX];
         size = 0;
         rand = new Random();
     }
 
     @Override
-    public boolean exist(int value) {
+    public boolean exist(String value) {
         for (int i = 0; i < size; i++) {
             if (elements[i] == value) {
                 return true;
@@ -28,7 +28,7 @@ public class StaticSetADT implements SetADT {
     }
 
     @Override
-    public int choose() {
+    public String choose() {
         if (isEmpty()) {
             throw new IllegalStateException("El conjunto está vacío");
         }
@@ -37,7 +37,7 @@ public class StaticSetADT implements SetADT {
     }
 
     @Override
-    public void add(int value) {
+    public void add(String value) {
         if (size >= MAX) {
             throw new IllegalStateException("El conjunto alcanzó su capacidad máxima");
         }
@@ -48,7 +48,7 @@ public class StaticSetADT implements SetADT {
     }
 
     @Override
-    public void remove(int value) {
+    public void remove(String value) {
         if (isEmpty()) return;
 
         for (int i = 0; i < size; i++) {
@@ -66,28 +66,4 @@ public class StaticSetADT implements SetADT {
         return size == 0;
     }
 
-    // Método auxiliar: obtener todos los elementos (no parte de la interfaz, opcional)
-    public int[] getAllElements() {
-        int[] result = new int[size];
-        System.arraycopy(elements, 0, result, 0, size);
-        return result;
-    }
-
-    // Método auxiliar: obtener el índice de un valor (opcional)
-    public int indexOf(int value) {
-        for (int i = 0; i < size; i++) {
-            if (elements[i] == value) return i;
-        }
-        return -1;
-    }
-
-    // Método auxiliar: obtener el valor en un índice
-    public int getAt(int index) {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
-        return elements[index];
-    }
-
-    public int size() {
-        return size;
-    }
 }

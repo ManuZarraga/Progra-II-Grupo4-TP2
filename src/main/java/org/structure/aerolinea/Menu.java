@@ -48,7 +48,9 @@ public class Menu {
     Avion avion10 = new Avion(1000, "Airbus A380");
 
     public Menu() {
-        grafo.addVertx(1);
+        grafo.addVertx("uno");
+        grafo.addVertx("dos");
+        grafo.addEdge("uno","dos",4);
     }
 
     public void iniciar() {
