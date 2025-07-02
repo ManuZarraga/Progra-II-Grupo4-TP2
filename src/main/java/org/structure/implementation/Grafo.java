@@ -113,4 +113,12 @@ public class Grafo implements GraphADT {
         }
         return -1;
     }
+
+    public int getCantVert() {
+        return cantVert;
+    }
+
+    public void setCantVert(int cantVert) {
+        this.cantVert = cantVert;
+    }
 }

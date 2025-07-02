@@ -9,12 +9,11 @@ import main.java.org.structure.exceptions.VueloInexistenteException;
 public class ColaVuelos implements PriorityQueueADT {
 
     private int tamanioCola;
-    private static Vuelo[] colaVuelos = new Vuelo[50];
-    private static int[] colaVuelosXPrioridad = new int[50];
+    private static Vuelo[] colaVuelos = new Vuelo[75];
+    private static int[] colaVuelosXPrioridad = new int[75];
     private int contador = 0;
 
-
-    public void mostrarCola(){
+    public void mostrarColaVuelos(){
         System.out.println("=== VUELOS PROGRAMADOS ===");
 
         System.out.println("Vuelos pendientes:");
@@ -48,6 +47,7 @@ public class ColaVuelos implements PriorityQueueADT {
         if (contador == 0) {
             colaVuelos[0] = value;
             colaVuelosXPrioridad[0] = condicion;
+            contador++;
         } else {
             int i;
             for (i = contador -1; i >= 0; i--) {
@@ -88,10 +88,13 @@ public class ColaVuelos implements PriorityQueueADT {
                 return colaVuelos[i];
             }
         }
-        throw new VueloInexistenteException("El Vuelo no existe");
+        return null;
     }
 
-    public void quitarPorId(Vuelo vuelo, int condicion){
+    public void quitarPorId(Vuelo vuelo){
+        if(isEmpty()){
+            throw new ColaVaciaException("La cola está vacia, no hay elementos para borrar");
+        }
         for(int j = 0; j < contador; j++){
             if(vuelo.getIDVuelo() == colaVuelos[j].getIDVuelo()){
                 for (int i = j; i < contador - 1; i++){

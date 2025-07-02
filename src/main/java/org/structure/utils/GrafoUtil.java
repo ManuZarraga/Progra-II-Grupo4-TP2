@@ -37,6 +37,54 @@ public class GrafoUtil {
         }
     }
 
+    private static int cantVertices(GraphADT grafo){
+        Set2ADT aux = grafo.getVertxs();
+        int cantVertices = 0;
+        while (!aux.isEmpty()){
+            String value = aux.choose();
+            aux.remove(value);
+            cantVertices++;
+        }
+        return cantVertices;
+    }
+
+    public static int vueloEntrada(GraphADT grafo , String vertice) {
+        Set2ADT aux = grafo.getVertxs();
+        int vuelo = 0;
+        for (int i = 0; i < cantVertices(grafo); i++) {
+            String value = aux.choose();
+            aux.remove(value);
+            if (grafo.existsEdge(value,vertice)){
+                vuelo++;
+            }
+        }
+        return vuelo;
+    }
+
+    public static int vueloSalida(GraphADT grafo , String vertice) {
+        Set2ADT aux = grafo.getVertxs();
+        int vuelo = 0;
+        for (int i = 0; i < cantVertices(grafo); i++) {
+            String value = aux.choose();
+            aux.remove(value);
+            if (grafo.existsEdge(vertice, value)) {
+                vuelo++;
+            }
+        }
+        return vuelo;
+    }
+
+    public static void mostrarVuelosEntradaSalida(GraphADT grafo){
+        Set2ADT aux = grafo.getVertxs();
+        while (!aux.isEmpty()){
+            String value = aux.choose();
+            aux.remove(value);
+            System.out.println("Aeropuerto" + value +
+                    " -> Vuelos de salida: " + vueloSalida(grafo,value) +
+                    ", Vuelos de entrada: " + vueloEntrada(grafo,value));
+        };
+    }
+
     public static void rutasNoUtilizadas(GraphADT grafo){
         Set2ADT set = grafo.getVertxs();
         Set2ADT emptySet = new StaticSetADT();

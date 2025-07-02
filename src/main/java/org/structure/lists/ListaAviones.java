@@ -17,6 +17,23 @@ public class ListaAviones implements AvionADT {
         }
     }
 
+    public void promedioAsignaciones(){
+        int cantUsoAviones = 0;
+        for(int i = 0; i < contador; i++){
+            cantUsoAviones += listaAviones[i].getCantViajes();
+        }
+        float promedioUsoAviones = cantUsoAviones/contador;
+        System.out.println("Promedio de uso de aviones: " + promedioUsoAviones);
+    }
+
+    public void avionesConMasAsignaciones(){
+        for(int i = 0; i < contador; i++){
+            if(listaAviones[i].getCantViajes() > 0){
+                System.out.println("Avion " + listaAviones[i].getTipoAvion() + " -> Vuelos asignados: " + listaAviones[i].getCantViajes());
+            }
+        }
+    }
+
     @Override
     public void add(Avion value) {
         if (contador == 30) {
@@ -71,7 +88,7 @@ public class ListaAviones implements AvionADT {
         return contador;
     }
 
-    public String buscarAvionXId(int matricula) {
+    public String buscarAvionXMatricula(int matricula) {
         for (int i=0;i<contador;i++){
             if (listaAviones[i].getMatricula() == matricula){
                 return listaAviones[i].getTipoAvion();

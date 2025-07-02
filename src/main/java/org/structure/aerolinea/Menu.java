@@ -1,22 +1,24 @@
 package main.java.org.structure.aerolinea;
 
+import main.java.org.structure.exceptions.AristaYaCreada;
+import main.java.org.structure.exceptions.ColaVaciaException;
+import main.java.org.structure.exceptions.NoHayAvionesDisponiblesException;
 import main.java.org.structure.fixed.ColaVuelos;
+import main.java.org.structure.fixed.ColaVuelosDespegados;
 import main.java.org.structure.implementation.Grafo;
 import main.java.org.structure.lists.ListaAeropuertos;
 import main.java.org.structure.lists.ListaAviones;
+import main.java.org.structure.utils.GrafoUtil;
 
 import java.util.Scanner;
 
 public class Menu {
 
     private String opcion;
-    private String consulta;
-    private int id;
     private ColaVuelos colaVuelos;
-    private int cantVuelos = 0;
+    private ColaVuelosDespegados colaVuelosDespegados;
     Scanner myObj = new Scanner(System.in);
     Grafo grafo = new Grafo();
-    Avion avion;
     ListaAviones listaAviones = new ListaAviones();
     ListaAeropuertos listaAeropuertos = new ListaAeropuertos();
 
@@ -47,7 +49,21 @@ public class Menu {
     Avion avion9 = new Avion(999, "Bombardier CRJ900");
     Avion avion10 = new Avion(1000, "Airbus A380");
 
+    Vuelo vuelo1 = new Vuelo(avion1, aer1.getCodigo(), aer2.getCodigo(), 1);
+    Vuelo vuelo2 = new Vuelo(avion2, aer2.getCodigo(), aer3.getCodigo(), 1);
+    Vuelo vuelo3 = new Vuelo(avion3, aer4.getCodigo(), aer7.getCodigo(), 1);
+    Vuelo vuelo4 = new Vuelo(avion4, aer1.getCodigo(), aer8.getCodigo(), 2);
+    Vuelo vuelo5 = new Vuelo(avion5, aer5.getCodigo(), aer2.getCodigo(), 3);
+    Vuelo vuelo6 = new Vuelo(avion6, aer12.getCodigo(), aer4.getCodigo(), 2);
+    Vuelo vuelo7 = new Vuelo(avion7, aer13.getCodigo(), aer2.getCodigo(), 2);
+    Vuelo vuelo8 = new Vuelo(avion8, aer6.getCodigo(), aer9.getCodigo(), 3);
+    Vuelo vuelo9 = new Vuelo(avion9, aer3.getCodigo(), aer12.getCodigo(), 3);
+    Vuelo vuelo10 = new Vuelo(avion10, aer7.getCodigo(), aer15.getCodigo(), 2);
+
+
     public Menu() {
+        this.colaVuelos = new ColaVuelos();
+        this.colaVuelosDespegados = new ColaVuelosDespegados();
         grafo.addVertx(aer1.getCodigo());
         grafo.addVertx(aer2.getCodigo());
         grafo.addVertx(aer3.getCodigo());
@@ -111,6 +127,18 @@ public class Menu {
         listaAeropuertos.add(aer13);
         listaAeropuertos.add(aer14);
         listaAeropuertos.add(aer15);
+
+        colaVuelos.add(vuelo1, vuelo1.getTipoVuelo());
+        colaVuelos.add(vuelo2, vuelo2.getTipoVuelo());
+        colaVuelos.add(vuelo3, vuelo3.getTipoVuelo());
+        colaVuelos.add(vuelo4, vuelo4.getTipoVuelo());
+        colaVuelos.add(vuelo5, vuelo5.getTipoVuelo());
+        colaVuelos.add(vuelo6, vuelo6.getTipoVuelo());
+        colaVuelos.add(vuelo7, vuelo7.getTipoVuelo());
+        colaVuelos.add(vuelo8, vuelo8.getTipoVuelo());
+        colaVuelos.add(vuelo9, vuelo9.getTipoVuelo());
+        colaVuelos.add(vuelo10, vuelo10.getTipoVuelo());
+
     }
 
     public void iniciar() {
@@ -123,9 +151,13 @@ public class Menu {
                 1. Agregar nuevo Vuelo
                 2. Agregar un nuevo Avion
                 3. Agregar nueva Ruta
-                4. Retrasar Vuelo
-                5. Cancelar Vuelo
-                6. Reportes
+                4. Despegar Vuelo
+                5. Terminar Vuelo
+                6. Retrasar Vuelo
+                7. Cancelar Vuelo
+                8. Listar Aviones con mayor asignación
+                9. Listar Aeropuertos con más vuelos entrantes/salientes
+                10. Utilización promedio de aviones
                 """);
         System.out.println("Ingrese una opción: ");
         opcion = myObj.nextLine();
@@ -141,52 +173,106 @@ public class Menu {
                 agregarRuta();
                 iniciar();
             case "4":
-                retrasarVuelo();
+                despegarVuelo();
                 iniciar();
             case "5":
-                cancelarVuelo();
+                terminarVuelo();
                 iniciar();
             case "6":
-                break;
+                retrasarVuelo();
+                iniciar();
+            case "7":
+                cancelarVuelo();
+                iniciar();
+            case "8":
+                listaAviones.avionesConMasAsignaciones();
+                iniciar();
+            case "9":
+                GrafoUtil.mostrarVuelosEntradaSalida(grafo);
+                iniciar();
+            case "10":
+                listaAviones.promedioAsignaciones();
+                iniciar();
             default:
                 System.out.println("Opción incorrecta.");
                 iniciar();
         }
     }
 
-    // VALIDAR NO REPETIDO
-    public void agregarRuta(){
-        System.out.println("Ingrese el codigo del primer aeropuerto: ");
-        listaAeropuertos.mostrarLista();
-        String codigo1 = myObj.nextLine();
-        while (!listaAeropuertos.existeAeropuerto(codigo1)) {
-            System.out.println("Código no válido, ingresar nuevamente: ");
-            listaAeropuertos.mostrarLista();
-            codigo1 = myObj.nextLine();
-        }
+    public void despegarVuelo(){
+        try {
+            Vuelo aux = colaVuelos.getElement();
+            if (aux == null){
+                throw new ColaVaciaException("No hay vuelos planificados");
+            }
+            System.out.println("Despegando el vuelo " + aux.getTipoVuelo() + " ID : " + aux.getIDVuelo());
+            colaVuelos.remove();
 
-        System.out.println("Ingrese el codigo del segundo aeropuerto: ");
-        listaAeropuertos.mostrarLista();
-        String codigo2 = myObj.nextLine();
-        while (!listaAeropuertos.existeAeropuerto(codigo2)) {
-            System.out.println("Código no válido, ingresar nuevamente: ");
-            listaAeropuertos.mostrarLista();
-            codigo2 = myObj.nextLine();
-        }
+            colaVuelosDespegados.add(aux);
 
-        grafo.addEdge(codigo1, codigo2, 1);
+        } catch (ColaVaciaException e) {
+            System.out.println(e.getMessage());
+            iniciar();
+        }
     }
 
-    // FALTA VALIDAR SI ESTA DISPONIBLE O NO ??? (NI IDEA DESPUES VEMOS)
+    public void terminarVuelo(){
+        Vuelo aux = colaVuelosDespegados.getElement();
+        aux.getAvion().setDisponible(true);
+        colaVuelosDespegados.remove();
+    }
+
+    public void agregarRuta(){
+        try {
+            System.out.println("Ingrese el codigo del primer aeropuerto: ");
+            listaAeropuertos.mostrarLista();
+            String codigo1 = myObj.nextLine();
+            while (!listaAeropuertos.existeAeropuerto(codigo1)) {
+                System.out.println("Código no válido, ingresar nuevamente: ");
+                listaAeropuertos.mostrarLista();
+                codigo1 = myObj.nextLine();
+            }
+
+            System.out.println("Ingrese el codigo del segundo aeropuerto: ");
+            listaAeropuertos.mostrarLista();
+            String codigo2 = myObj.nextLine();
+            while (!listaAeropuertos.existeAeropuerto(codigo2)) {
+                System.out.println("Código no válido, ingresar nuevamente: ");
+                listaAeropuertos.mostrarLista();
+                codigo2 = myObj.nextLine();
+            }
+
+            if (grafo.existsEdge(codigo1, codigo2)){
+                throw new AristaYaCreada("Esa ruta ya existe");
+            }
+
+            grafo.addEdge(codigo1, codigo2, 1);
+            System.out.println("Nueva Ruta creada: " + codigo1 + " - " + codigo2);
+
+        } catch (AristaYaCreada e) {
+            System.out.println(e.getMessage());
+            iniciar();
+        }
+    }
+
     public void agregarVuelo() {
-        while (avion == null) {
-            for (int i = 0; i < listaAviones.getContador(); i++) {
+        Avion avion = null;
+        int i = 0;
+        try {
+            while(avion == null){
                 if (listaAviones.get(i).isDisponible()) {
                     avion = listaAviones.get(i);
                     listaAviones.get(i).setDisponible(false);
                     listaAviones.get(i).setCantViajes(listaAviones.get(i).getCantViajes() + 1);
                 }
+                if (i == listaAviones.size()) {
+                    throw new NoHayAvionesDisponiblesException("No hay aviones disponibles.");
+                }
+                i++;
             }
+        } catch (NoHayAvionesDisponiblesException e) {
+            System.out.println(e.getMessage());
+            iniciar();
         }
 
         System.out.println("Ingrese Origen del Vuelo: ");
@@ -201,7 +287,7 @@ public class Menu {
         System.out.println("Ingrese Destino del Vuelo: ");
         listaAeropuertos.mostrarLista();
         String destino = myObj.nextLine();
-        while (!listaAeropuertos.existeAeropuerto(origen)) {
+        while (!listaAeropuertos.existeAeropuerto(destino)) {
             System.out.println("Código no válido, ingresar nuevamente: ");
             listaAeropuertos.mostrarLista();
             destino = myObj.nextLine();
@@ -213,36 +299,74 @@ public class Menu {
                 "3 - CARGA" +
                 " ");
         int tipoVuelo = myObj.nextInt();
-        cantVuelos++;
-        Vuelo vuelo = new Vuelo(avion, origen, destino, tipoVuelo, cantVuelos);
+        while (tipoVuelo < 1 || tipoVuelo > 3) {
+            System.out.println("Opción incorrecta, elija un tipo válido: " +
+                    "1 - INTERNACIONAL" +
+                    "2 - NACIONAL" +
+                    "3 - CARGA" +
+                    " ");
+            tipoVuelo = myObj.nextInt();
+        }
+
+        Vuelo vuelo = new Vuelo(avion, origen, destino, tipoVuelo);
         colaVuelos.add(vuelo, tipoVuelo);
     }
 
-    // FALTA VALIDAR
     public void retrasarVuelo(){
-        System.out.println("Ingrese el ID del Vuelo a retrasar: ");
-        int idVuelo = myObj.nextInt();
-        Vuelo vueloARetrasar = colaVuelos.buscarPorId(idVuelo);
-        if(vueloARetrasar.getTipoVuelo() == 3){
-            colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo());
-        } else {
-            colaVuelos.quitarPorId(vueloARetrasar, vueloARetrasar.getTipoVuelo());
-            colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo() + 1);
+        try {
+            System.out.println("Ingrese el ID del Vuelo a retrasar: ");
+            colaVuelos.mostrarColaVuelos();
+            int idVuelo = myObj.nextInt();
+            while (colaVuelos.buscarPorId(idVuelo) == null ) {
+                System.out.println("Ingrese un ID correcto: ");
+                colaVuelos.mostrarColaVuelos();
+                idVuelo = myObj.nextInt();
+            }
+
+            Vuelo vueloARetrasar = colaVuelos.buscarPorId(idVuelo);
+            if(vueloARetrasar.getTipoVuelo() == 3){
+                colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo());
+            } else {
+                colaVuelos.quitarPorId(vueloARetrasar);
+                colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo() + 1);
+            }
+        } catch (ColaVaciaException e){
+            System.out.println(e.getMessage());
+            iniciar();
         }
+
     }
 
-    // FALTA VALIDAR
     public void cancelarVuelo(){
-        System.out.println("Ingrese el ID del Vuelo a cancelar: ");
-        int idVuelo = myObj.nextInt();
-        Vuelo vueloACancelar = colaVuelos.buscarPorId(idVuelo);
-        colaVuelos.quitarPorId(vueloACancelar, vueloACancelar.getTipoVuelo());
+        try {
+            System.out.println("Ingrese el ID del Vuelo a cancelar: ");
+            colaVuelos.mostrarColaVuelos();
+            int idVuelo = myObj.nextInt();
+            while (colaVuelos.buscarPorId(idVuelo) == null ) {
+                System.out.println("Ingrese un ID correcto: ");
+                colaVuelos.mostrarColaVuelos();
+                idVuelo = myObj.nextInt();
+            }
+
+            Vuelo vueloACancelar = colaVuelos.buscarPorId(idVuelo);
+            vueloACancelar.getAvion().setDisponible(true);
+            colaVuelos.quitarPorId(vueloACancelar);
+        } catch (ColaVaciaException e){
+            System.out.println(e.getMessage());
+            iniciar();
+        }
+
     }
 
     // FALTA VALIDAR SOLO NUMEROS LA MATRICULAAAAAAAA me quiero m
     public void agregarAvion(){
         System.out.println("Ingrese Matricula del nuevo Avion: ");
         int matricula = myObj.nextInt();
+
+        while (listaAviones.buscarAvionXMatricula(matricula) != null) {
+            System.out.println("El Avion ya existe, ingresar otra matricula: ");
+            matricula = myObj.nextInt();
+        }
 
         System.out.println("Ingrese el Tipo de Avion: ");
         String tipoAvion = myObj.nextLine();

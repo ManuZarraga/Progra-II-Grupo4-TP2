@@ -10,32 +10,6 @@ import main.java.org.structure.utils.GrafoUtil;
 
 public class Main {
     public static void main(String[] args) {
-        //GraphADT grafo = new Grafo();
-        //grafo.addVertx("uno");
-        //grafo.addVertx("dos");
-        //grafo.addVertx("tres");
-        //grafo.addVertx("cuatro");
-        //grafo.addVertx("cinco");
-        //grafo.addEdge("uno","dos",4);
-        //grafo.addEdge("dos","tres",4);
-        //grafo.addEdge("uno","cuatro",4);
-        //grafo.addEdge("tres","uno",4);
-        //grafo.addEdge("uno","cuatro",4);
-        //grafo.addEdge("cuatro","tres",4);
-//
-        //GrafoUtil.dfs(grafo, "uno", "tres");
-        //GrafoUtil.rutasNoUtilizadas(grafo);
-//
-        //Set2ADT set = new StaticSetADT();
-        //set.add("asd");
-        //set.add("as124213d");
-        //set.add("assadd");
-        //set.add("as2222d");
-        //while (!set.isEmpty()){
-        //    String aux = set.choose();
-        //    set.remove(aux);
-        //}
-//
         Menu menu = new Menu();
         menu.iniciar();
     }

@@ -13,7 +13,7 @@ public class ListaAeropuertos implements AeropuertoADT {
 
     public void  mostrarLista(){
         for(int i = 0; i < contador; i++){
-            System.out.println(listaAeropuertos[i]);
+            System.out.println(listaAeropuertos[i].getCodigo());
         }
     }
 
