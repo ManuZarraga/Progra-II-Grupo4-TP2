@@ -13,7 +13,7 @@ public class ListaAviones implements AvionADT {
 
     public void mostrarLista(){
         for(int i = 0; i < contador; i++){
-            System.out.println(listaAviones[i]);
+            System.out.println(listaAviones[i].getMatricula() + " " + listaAviones[i].getTipoAvion() + listaAviones[i].isDisponible());
         }
     }
 

@@ -18,7 +18,7 @@ public class ColaVuelos implements PriorityQueueADT {
 
         System.out.println("Vuelos pendientes:");
         for(int i = 0; i < contador; i++){
-            System.out.println(colaVuelos[i]);
+            System.out.println("ID: " + colaVuelos[i].getIDVuelo() + " ORIGEN: " + colaVuelos[i].getOrigen() + " | DESTINO: " + colaVuelos[i].getDestino());
         }
     }
 
@@ -47,14 +47,13 @@ public class ColaVuelos implements PriorityQueueADT {
         if (contador == 0) {
             colaVuelos[0] = value;
             colaVuelosXPrioridad[0] = condicion;
-            contador++;
         } else {
             int i;
             for (i = contador -1; i >= 0; i--) {
-                int urgenciaActual = condicion;
-                int urgenciaEnCola = colaVuelosXPrioridad[i];
+                int tipoVuelo = condicion;
+                int prioridadEnCola = colaVuelosXPrioridad[i];
 
-                if (urgenciaActual >= urgenciaEnCola) {
+                if (tipoVuelo >= prioridadEnCola) {
                     break;
                 }
                 colaVuelos[i + 1] = colaVuelos[i];

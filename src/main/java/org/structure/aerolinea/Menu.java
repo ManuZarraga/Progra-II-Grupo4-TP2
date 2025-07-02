@@ -49,18 +49,6 @@ public class Menu {
     Avion avion9 = new Avion(999, "Bombardier CRJ900");
     Avion avion10 = new Avion(1000, "Airbus A380");
 
-    Vuelo vuelo1 = new Vuelo(avion1, aer1.getCodigo(), aer2.getCodigo(), 1);
-    Vuelo vuelo2 = new Vuelo(avion2, aer2.getCodigo(), aer3.getCodigo(), 1);
-    Vuelo vuelo3 = new Vuelo(avion3, aer4.getCodigo(), aer7.getCodigo(), 1);
-    Vuelo vuelo4 = new Vuelo(avion4, aer1.getCodigo(), aer8.getCodigo(), 2);
-    Vuelo vuelo5 = new Vuelo(avion5, aer5.getCodigo(), aer2.getCodigo(), 3);
-    Vuelo vuelo6 = new Vuelo(avion6, aer12.getCodigo(), aer4.getCodigo(), 2);
-    Vuelo vuelo7 = new Vuelo(avion7, aer13.getCodigo(), aer2.getCodigo(), 2);
-    Vuelo vuelo8 = new Vuelo(avion8, aer6.getCodigo(), aer9.getCodigo(), 3);
-    Vuelo vuelo9 = new Vuelo(avion9, aer3.getCodigo(), aer12.getCodigo(), 3);
-    Vuelo vuelo10 = new Vuelo(avion10, aer7.getCodigo(), aer15.getCodigo(), 2);
-
-
     public Menu() {
         this.colaVuelos = new ColaVuelos();
         this.colaVuelosDespegados = new ColaVuelosDespegados();
@@ -128,17 +116,7 @@ public class Menu {
         listaAeropuertos.add(aer14);
         listaAeropuertos.add(aer15);
 
-        colaVuelos.add(vuelo1, vuelo1.getTipoVuelo());
-        colaVuelos.add(vuelo2, vuelo2.getTipoVuelo());
-        colaVuelos.add(vuelo3, vuelo3.getTipoVuelo());
-        colaVuelos.add(vuelo4, vuelo4.getTipoVuelo());
-        colaVuelos.add(vuelo5, vuelo5.getTipoVuelo());
-        colaVuelos.add(vuelo6, vuelo6.getTipoVuelo());
-        colaVuelos.add(vuelo7, vuelo7.getTipoVuelo());
-        colaVuelos.add(vuelo8, vuelo8.getTipoVuelo());
-        colaVuelos.add(vuelo9, vuelo9.getTipoVuelo());
-        colaVuelos.add(vuelo10, vuelo10.getTipoVuelo());
-
+        precargar();
     }
 
     public void iniciar() {
@@ -205,7 +183,7 @@ public class Menu {
             if (aux == null){
                 throw new ColaVaciaException("No hay vuelos planificados");
             }
-            System.out.println("Despegando el vuelo " + aux.getTipoVuelo() + " ID : " + aux.getIDVuelo());
+            System.out.println("Despegando el vuelo de prioridad " + aux.getTipoVuelo() + " ID : " + aux.getIDVuelo());
             colaVuelos.remove();
 
             colaVuelosDespegados.add(aux);
@@ -217,9 +195,14 @@ public class Menu {
     }
 
     public void terminarVuelo(){
-        Vuelo aux = colaVuelosDespegados.getElement();
-        aux.getAvion().setDisponible(true);
-        colaVuelosDespegados.remove();
+        try {
+            Vuelo aux = colaVuelosDespegados.getElement();
+            colaVuelosDespegados.remove();
+            aux.getAvion().setDisponible(true);
+        } catch (ColaVaciaException e) {
+            System.out.println(e.getMessage());
+            iniciar();
+        }
     }
 
     public void agregarRuta(){
@@ -302,11 +285,13 @@ public class Menu {
         while (tipoVuelo < 1 || tipoVuelo > 3) {
             System.out.println("Opción incorrecta, elija un tipo válido: " +
                     "1 - INTERNACIONAL" +
-                    "2 - NACIONAL" +
-                    "3 - CARGA" +
+                    " 2 - NACIONAL" +
+                    " 3 - CARGA" +
                     " ");
             tipoVuelo = myObj.nextInt();
         }
+
+        System.out.println("Vuelo creado con éxito!");
 
         Vuelo vuelo = new Vuelo(avion, origen, destino, tipoVuelo);
         colaVuelos.add(vuelo, tipoVuelo);
@@ -326,9 +311,11 @@ public class Menu {
             Vuelo vueloARetrasar = colaVuelos.buscarPorId(idVuelo);
             if(vueloARetrasar.getTipoVuelo() == 3){
                 colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo());
+                System.out.println("Vuelo retrasado!");
             } else {
                 colaVuelos.quitarPorId(vueloARetrasar);
                 colaVuelos.add(vueloARetrasar, vueloARetrasar.getTipoVuelo() + 1);
+                System.out.println("Vuelo retrasado!");
             }
         } catch (ColaVaciaException e){
             System.out.println(e.getMessage());
@@ -351,6 +338,7 @@ public class Menu {
             Vuelo vueloACancelar = colaVuelos.buscarPorId(idVuelo);
             vueloACancelar.getAvion().setDisponible(true);
             colaVuelos.quitarPorId(vueloACancelar);
+            System.out.println("Vuelo Cancelado!");
         } catch (ColaVaciaException e){
             System.out.println(e.getMessage());
             iniciar();
@@ -358,7 +346,6 @@ public class Menu {
 
     }
 
-    // FALTA VALIDAR SOLO NUMEROS LA MATRICULAAAAAAAA me quiero m
     public void agregarAvion(){
         System.out.println("Ingrese Matricula del nuevo Avion: ");
         int matricula = myObj.nextInt();
@@ -367,6 +354,7 @@ public class Menu {
             System.out.println("El Avion ya existe, ingresar otra matricula: ");
             matricula = myObj.nextInt();
         }
+        myObj.nextLine();
 
         System.out.println("Ingrese el Tipo de Avion: ");
         String tipoAvion = myObj.nextLine();
@@ -375,4 +363,75 @@ public class Menu {
         listaAviones.add(nuevoAvion);
     }
 
+    private void precargar() {
+        Vuelo vuelo1 = new Vuelo(avion1, aer1.getCodigo(), aer2.getCodigo(), 1);
+        Vuelo vuelo2 = new Vuelo(avion2, aer2.getCodigo(), aer3.getCodigo(), 1);
+        Vuelo vuelo3 = new Vuelo(avion3, aer4.getCodigo(), aer7.getCodigo(), 1);
+        Vuelo vuelo4 = new Vuelo(avion4, aer1.getCodigo(), aer8.getCodigo(), 2);
+        Vuelo vuelo5 = new Vuelo(avion5, aer5.getCodigo(), aer2.getCodigo(), 3);
+        Vuelo vuelo6 = new Vuelo(avion6, aer12.getCodigo(), aer4.getCodigo(), 2);
+        Vuelo vuelo7 = new Vuelo(avion7, aer13.getCodigo(), aer2.getCodigo(), 2);
+        Vuelo vuelo8 = new Vuelo(avion8, aer6.getCodigo(), aer9.getCodigo(), 3);
+        Vuelo vuelo9 = new Vuelo(avion9, aer3.getCodigo(), aer12.getCodigo(), 3);
+        Vuelo vuelo10 = new Vuelo(avion10, aer7.getCodigo(), aer15.getCodigo(), 2);
+
+        Vuelo vuelo11 = new Vuelo(avion1, aer2.getCodigo(), aer1.getCodigo(), 1);
+        Vuelo vuelo12 = new Vuelo(avion2, aer3.getCodigo(), aer5.getCodigo(), 2);
+        Vuelo vuelo13 = new Vuelo(avion3, aer7.getCodigo(), aer6.getCodigo(), 3);
+        Vuelo vuelo14 = new Vuelo(avion4, aer8.getCodigo(), aer9.getCodigo(), 2);
+        Vuelo vuelo15 = new Vuelo(avion5, aer10.getCodigo(), aer4.getCodigo(), 1);
+        Vuelo vuelo16 = new Vuelo(avion6, aer11.getCodigo(), aer3.getCodigo(), 2);
+        Vuelo vuelo17 = new Vuelo(avion7, aer2.getCodigo(), aer13.getCodigo(), 1);
+        Vuelo vuelo18 = new Vuelo(avion8, aer9.getCodigo(), aer6.getCodigo(), 3);
+        Vuelo vuelo19 = new Vuelo(avion9, aer12.getCodigo(), aer5.getCodigo(), 2);
+        Vuelo vuelo20 = new Vuelo(avion10, aer15.getCodigo(), aer14.getCodigo(), 1);
+
+        Vuelo vuelo21 = new Vuelo(avion1, aer11.getCodigo(), aer10.getCodigo(), 2);
+        Vuelo vuelo22 = new Vuelo(avion2, aer14.getCodigo(), aer12.getCodigo(), 3);
+        Vuelo vuelo23 = new Vuelo(avion3, aer1.getCodigo(), aer5.getCodigo(), 1);
+        Vuelo vuelo24 = new Vuelo(avion4, aer4.getCodigo(), aer3.getCodigo(), 1);
+        Vuelo vuelo25 = new Vuelo(avion5, aer2.getCodigo(), aer6.getCodigo(), 2);
+        Vuelo vuelo26 = new Vuelo(avion6, aer7.getCodigo(), aer8.getCodigo(), 2);
+        Vuelo vuelo27 = new Vuelo(avion7, aer5.getCodigo(), aer1.getCodigo(), 3);
+        Vuelo vuelo28 = new Vuelo(avion8, aer3.getCodigo(), aer9.getCodigo(), 1);
+        Vuelo vuelo29 = new Vuelo(avion9, aer10.getCodigo(), aer11.getCodigo(), 3);
+        Vuelo vuelo30 = new Vuelo(avion10, aer6.getCodigo(), aer4.getCodigo(), 2);
+
+        Vuelo vuelo31 = new Vuelo(avion1, aer1.getCodigo(), aer14.getCodigo(), 1);
+        Vuelo vuelo32 = new Vuelo(avion2, aer13.getCodigo(), aer12.getCodigo(), 2);
+        Vuelo vuelo33 = new Vuelo(avion3, aer11.getCodigo(), aer2.getCodigo(), 1);
+        Vuelo vuelo34 = new Vuelo(avion4, aer5.getCodigo(), aer7.getCodigo(), 3);
+        Vuelo vuelo35 = new Vuelo(avion5, aer8.getCodigo(), aer10.getCodigo(), 1);
+        Vuelo vuelo36 = new Vuelo(avion6, aer4.getCodigo(), aer15.getCodigo(), 2);
+        Vuelo vuelo37 = new Vuelo(avion7, aer9.getCodigo(), aer3.getCodigo(), 3);
+        Vuelo vuelo38 = new Vuelo(avion8, aer12.getCodigo(), aer13.getCodigo(), 2);
+        Vuelo vuelo39 = new Vuelo(avion9, aer6.getCodigo(), aer1.getCodigo(), 1);
+        Vuelo vuelo40 = new Vuelo(avion10, aer7.getCodigo(), aer9.getCodigo(), 2);
+
+        Vuelo vuelo41 = new Vuelo(avion1, aer2.getCodigo(), aer8.getCodigo(), 3);
+        Vuelo vuelo42 = new Vuelo(avion2, aer3.getCodigo(), aer4.getCodigo(), 1);
+        Vuelo vuelo43 = new Vuelo(avion3, aer5.getCodigo(), aer11.getCodigo(), 2);
+        Vuelo vuelo44 = new Vuelo(avion4, aer6.getCodigo(), aer13.getCodigo(), 1);
+        Vuelo vuelo45 = new Vuelo(avion5, aer7.getCodigo(), aer3.getCodigo(), 2);
+        Vuelo vuelo46 = new Vuelo(avion6, aer9.getCodigo(), aer5.getCodigo(), 3);
+        Vuelo vuelo47 = new Vuelo(avion7, aer8.getCodigo(), aer1.getCodigo(), 1);
+        Vuelo vuelo48 = new Vuelo(avion8, aer10.getCodigo(), aer2.getCodigo(), 3);
+        Vuelo vuelo49 = new Vuelo(avion9, aer14.getCodigo(), aer15.getCodigo(), 2);
+        Vuelo vuelo50 = new Vuelo(avion10, aer15.getCodigo(), aer13.getCodigo(), 1);
+
+        Vuelo[] vuelos = {
+                vuelo1, vuelo2, vuelo3, vuelo4, vuelo5, vuelo6, vuelo7, vuelo8, vuelo9, vuelo10,
+                vuelo11, vuelo12, vuelo13, vuelo14, vuelo15, vuelo16, vuelo17, vuelo18, vuelo19, vuelo20,
+                vuelo21, vuelo22, vuelo23, vuelo24, vuelo25, vuelo26, vuelo27, vuelo28, vuelo29, vuelo30,
+                vuelo31, vuelo32, vuelo33, vuelo34, vuelo35, vuelo36, vuelo37, vuelo38, vuelo39, vuelo40,
+                vuelo41, vuelo42, vuelo43, vuelo44, vuelo45, vuelo46, vuelo47, vuelo48, vuelo49, vuelo50
+        };
+
+        for (Vuelo vuelo : vuelos) {
+            Avion avion = vuelo.getAvion();
+            avion.setDisponible(false);
+            avion.setCantViajes(avion.getCantViajes() + 1);
+            colaVuelos.add(vuelo, vuelo.getTipoVuelo());
+        }
+    }
 }

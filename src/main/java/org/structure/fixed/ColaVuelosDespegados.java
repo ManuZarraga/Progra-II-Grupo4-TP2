@@ -13,6 +13,15 @@ public class ColaVuelosDespegados implements QueueADT {
     private int ultimoValor = -1;
     private int size = 0;
 
+    public void mostrarColaVuelosDespegados(){
+        System.out.println("=== VUELOS PROGRAMADOS ===");
+
+        System.out.println("Vuelos pendientes:");
+        for(int i = 0; i < size; i++){
+            System.out.println("ID: " + colaVuelosDespegados[i].getIDVuelo() + " ORIGEN: " + colaVuelosDespegados[i].getOrigen() + " | DESTINO: " + colaVuelosDespegados[i].getDestino());
+        }
+    }
+
     @Override
     public Vuelo getElement() {
         if (isEmpty()) {
