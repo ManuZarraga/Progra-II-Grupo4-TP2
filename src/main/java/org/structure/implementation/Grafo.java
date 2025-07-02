@@ -11,10 +11,9 @@ public class Grafo implements GraphADT {
     private String[][] edges;
     private int cantVert=0;
 
-    public Grafo(int numberOfVertices) {
+    public Grafo() {
         vertices = new String[50];
         edges = new String[50][50];
-
     }
 
     @Override
@@ -62,7 +61,9 @@ public class Grafo implements GraphADT {
                 if (edges[aux1][aux]==null){
                     edges[aux][aux1] = vertxOne;
                 }
-                else {throw new AristaYaCreada("La arista ya fue creada")}
+                else {
+                    throw new AristaYaCreada("La arista ya fue creada");
+                }
             }
     }
 
@@ -91,6 +92,7 @@ public class Grafo implements GraphADT {
     public boolean isEmpty() {
         return getVertxs().isEmpty();
     }
+
     private boolean exist(String[] array,String value){
         for (String elemento:array){
             if (elemento==value){
@@ -98,6 +100,7 @@ public class Grafo implements GraphADT {
         }
         return false;
     }
+
     private int pos(String[] array,String value){
         for (int i=0;i<cantVert;i++){
             if (array[i].equals(value)){

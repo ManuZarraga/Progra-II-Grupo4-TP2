@@ -1,20 +1,20 @@
 package main.java.org.structure.fixed;
 
 import main.java.org.structure.definition.Set2ADT;
+import main.java.org.structure.exceptions.SetVacioException;
 
 import java.util.Random;
 
 public class StaticSetADT implements Set2ADT {
 
-    private final int MAX = 100; // Capacidad máxima del conjunto
+    private final int MAX = 100;
     private String[] elements;
     private int size;
-    private Random rand;
+    private Random rand = new Random();
 
     public StaticSetADT() {
         elements = new String[MAX];
         size = 0;
-        rand = new Random();
     }
 
     @Override
@@ -30,10 +30,25 @@ public class StaticSetADT implements Set2ADT {
     @Override
     public String choose() {
         if (isEmpty()) {
-            throw new IllegalStateException("El conjunto está vacío");
+            throw new SetVacioException("El conjunto está vacío");
         }
-        int index = rand.nextInt(size);
-        return elements[index];
+        int validCount = 0;
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i] != null) {
+                validCount++;
+            }
+        }
+        int randomPos = rand.nextInt(validCount);
+        int seen = 0;
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i] != null) {
+                if (seen == randomPos) {
+                    return elements[i];
+                }
+                seen++;
+            }
+        }
+        throw new RuntimeException("Error inesperado en choose()");
     }
 
     @Override
@@ -47,19 +62,21 @@ public class StaticSetADT implements Set2ADT {
         }
     }
 
-    @Override
-    public void remove(String value) {
-        if (isEmpty()) return;
 
+    @Override
+    public void remove(String element) {if (exist(element)) {
+        if (!exist(element)) {
+            throw new IllegalStateException("No se puede eliminar un elemento que no existe");
+        }
         for (int i = 0; i < size; i++) {
-            if (elements[i] == value) {
-                // Mover el último elemento al lugar del eliminado
+            if (elements[i] == element) {
                 elements[i] = elements[size - 1];
+                elements[size - 1] = null;
                 size--;
                 return;
             }
         }
-    }
+    }}
 
     @Override
     public boolean isEmpty() {

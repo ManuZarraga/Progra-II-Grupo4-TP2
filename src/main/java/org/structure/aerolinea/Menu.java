@@ -15,7 +15,7 @@ public class Menu {
     private ColaVuelos colaVuelos;
     private int cantVuelos = 0;
     Scanner myObj = new Scanner(System.in);
-    Grafo grafo = new Grafo(15);
+    Grafo grafo = new Grafo();
     Avion avion;
     ListaAviones listaAviones = new ListaAviones();
     ListaAeropuertos listaAeropuertos = new ListaAeropuertos();
