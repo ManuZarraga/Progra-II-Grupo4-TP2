@@ -20,7 +20,7 @@ public class StaticSetADT implements Set2ADT {
     @Override
     public boolean exist(String value) {
         for (int i = 0; i < size; i++) {
-            if (elements[i] == value) {
+            if (elements[i] != null && elements[i].equals(value)) {
                 return true;
             }
         }
@@ -32,23 +32,8 @@ public class StaticSetADT implements Set2ADT {
         if (isEmpty()) {
             throw new SetVacioException("El conjunto está vacío");
         }
-        int validCount = 0;
-        for (int i = 0; i < elements.length; i++) {
-            if (elements[i] != null) {
-                validCount++;
-            }
-        }
-        int randomPos = rand.nextInt(validCount);
-        int seen = 0;
-        for (int i = 0; i < elements.length; i++) {
-            if (elements[i] != null) {
-                if (seen == randomPos) {
-                    return elements[i];
-                }
-                seen++;
-            }
-        }
-        throw new RuntimeException("Error inesperado en choose()");
+        int randomPos = rand.nextInt(size);
+        return elements[randomPos];
     }
 
     @Override
@@ -62,25 +47,20 @@ public class StaticSetADT implements Set2ADT {
         }
     }
 
-
     @Override
-    public void remove(String element) {if (exist(element)) {
-        if (!exist(element)) {
-            throw new IllegalStateException("No se puede eliminar un elemento que no existe");
-        }
+    public void remove(String element) {
         for (int i = 0; i < size; i++) {
-            if (elements[i] == element) {
+            if (elements[i] != null && elements[i].equals(element)) {
                 elements[i] = elements[size - 1];
                 elements[size - 1] = null;
                 size--;
                 return;
             }
         }
-    }}
+    }
 
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
-
 }

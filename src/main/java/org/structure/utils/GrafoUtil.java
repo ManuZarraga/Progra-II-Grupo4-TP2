@@ -2,6 +2,7 @@ package main.java.org.structure.utils;
 
 import main.java.org.structure.definition.GraphADT;
 import main.java.org.structure.definition.Set2ADT;
+import main.java.org.structure.fixed.StaticSetADT;
 
 public class GrafoUtil {
 
@@ -33,6 +34,36 @@ public class GrafoUtil {
                     dfsRecursivo(grafo, posicion, aux, destino, visited, vertices);
                 }
             }
+        }
+    }
+
+    public static void rutasNoUtilizadas(GraphADT grafo){
+        Set2ADT set = grafo.getVertxs();
+        Set2ADT emptySet = new StaticSetADT();
+        while (!set.isEmpty()){
+            String aux = set.choose();
+            set.remove(aux);
+
+            Set2ADT set2 = grafo.getVertxs();
+            boolean isEmpty = false;
+            while (!set2.isEmpty()){
+                String aux2 = set2.choose();
+                set2.remove(aux2);
+
+                if(grafo.existsEdge(aux2, aux) || grafo.existsEdge(aux, aux2)){
+                    isEmpty = true;
+                    break;
+                }
+            }
+            if(!isEmpty){
+                emptySet.add(aux);
+            }
+        }
+
+        while (!emptySet.isEmpty()){
+            String aux = emptySet.choose();
+            emptySet.remove(aux);
+            System.out.print(aux);
         }
     }
 }
