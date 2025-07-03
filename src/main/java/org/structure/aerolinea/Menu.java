@@ -248,7 +248,7 @@ public class Menu {
                     listaAviones.get(i).setDisponible(false);
                     listaAviones.get(i).setCantViajes(listaAviones.get(i).getCantViajes() + 1);
                 }
-                if (i == listaAviones.size()) {
+                if (i == listaAviones.size()-1) {
                     throw new NoHayAvionesDisponiblesException("No hay aviones disponibles.");
                 }
                 i++;
